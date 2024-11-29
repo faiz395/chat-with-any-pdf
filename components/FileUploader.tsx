@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react'
   import { useDropzone } from 'react-dropzone'
 import { useRouter } from 'next/navigation';
 import { Loader2Icon, Upload } from 'lucide-react';
+import serviceClient from '@/appwriteClient';
 
 // import React, { useCallback, useState } from 'react';
 // import { useDropzone } from 'react-dropzone';
@@ -177,15 +178,29 @@ function FileUploader() {
           return prev + 10;
         });
       }, 500);
+      // before calling the api 1st upload the file to appwrite
+      const uploadedFile = await serviceClient.addNewPdfToBucket(file);
+      if (!uploadedFile?.$id) {
+        throw new Error("Failed to upload file to bucket");
+      }
+      console.log('✅ File uploaded successfully in frontend:', uploadedFile.$id);
+      const fileId = uploadedFile.$id;
 
       // Create FormData
+     
+      // Create FormData with fileId
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('fileId', fileId);
 
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
+
+      // const response = await fetch('/api/upload', {
+      //   method: 'POST',
+      //   body: fileId,
+      // });
      console.log("res is: ", response);
       
       clearInterval(progressInterval);

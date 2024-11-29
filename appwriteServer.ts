@@ -190,7 +190,19 @@ async addNewPdfToBucket(file: File) {
   async getPdfFromBucketById(fileId: string) {
     try {
       const res = await this.bucket.getFile(storageId as string, fileId as string);
-      console.log("File retrieved successfully:", res);
+      console.log("✅ File retrieved successfully:", res);
+      return res;
+    } catch (error) {
+      console.error("Error in getFileFromBucket:", error);
+      throw error;
+    }
+  }
+
+  // write a function to get a file from th bucket if the id is provided
+  async getPdfDownloadFromBucketById(fileId: string) {
+    try {
+      const res = await this.bucket.getFileDownload(storageId as string, fileId as string);
+      console.log("✅ File retrieved successfully:", res);
       return res;
     } catch (error) {
       console.error("Error in getFileFromBucket:", error);
