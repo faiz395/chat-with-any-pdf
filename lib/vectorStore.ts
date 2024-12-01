@@ -25,15 +25,24 @@ export async function generateEmbeddingsInPineconeVectorStore(
 
     console.log('📚 Loading PDF document...');
 
-    let response = await serviceServer.getPdfFromBucketById(docId);
+    let response = await serviceServer.getPdfDownloadFromBucketById(docId);
 
     console.log("ref: ", response);
 
-    const buffer = await response.arrayBuffer();
-        const uint8Array = new Uint8Array(buffer);
-        const blob = new Blob([uint8Array], { type: 'application/pdf' });
+    const buffer = Buffer.from(response);
+    console.log("✅ Buffer created successfully:", {
+        bufferSize: `${(buffer.length / 1024 / 1024).toFixed(2)}MB`,
+    });
 
+    // Create a Blob from the buffer
+    console.log("🔄 Creating Blob from buffer...");
+    const blob = new Blob([buffer], { type: "application/pdf" });
+    console.log("✅ Blob created successfully:", {
+        blobSize: `${(blob.size / 1024 / 1024).toFixed(2)}MB`,
+    });
+    console.log("📚 Loading PDF with LangChain PDFLoader...");
     const loader = new PDFLoader(blob);
+
     const pages = await loader.load();
     console.log(`📄 Loaded ${pages.length} pages`);
 

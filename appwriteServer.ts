@@ -209,6 +209,21 @@ async addNewPdfToBucket(file: File) {
       throw error;
     }
   }
+
+  //  added by ai
+  async getUserDocuments(userId: string) {
+    try {
+      const response = await this.databases.listDocuments(
+        databaseId as string,
+        documentsCollectionId as string,
+        [Query.equal("userId", userId)]
+      );
+      return response.documents;
+    } catch (error) {
+      console.error("Error in getUserDocuments:", error);
+      throw error;
+    }
+  }
 }
 
 const serviceServer = new ServiceServer();

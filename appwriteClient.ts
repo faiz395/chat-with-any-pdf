@@ -132,10 +132,10 @@ class ServiceClient {
 
   async addNewPdfToBucket(file: File) {
     const uniqueId = ID.unique();
-    const formData = new FormData();
-    formData.append("file", file); // Add the file to form data
-    console.log("fordataL ", formData);
-    console.log("type of formData: ", typeof formData);
+    // const formData = new FormData();
+    // formData.append("file", file); // Add the file to form data
+    // console.log("fordataL ", formData);
+    // console.log("type of formData: ", typeof formData);
 
     try {
       console.log("uniqueId: ", uniqueId);
