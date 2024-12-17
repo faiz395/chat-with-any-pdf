@@ -4,11 +4,12 @@ import { Send } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 
 interface ChatInputProps {
+  documentId: string;
   onSendMessage: (message: string) => void;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
-export default function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
+export default function ChatInput({ documentId, onSendMessage, isLoading }: ChatInputProps) {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

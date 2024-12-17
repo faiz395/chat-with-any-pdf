@@ -8,9 +8,12 @@ import serviceClient from "@/appwriteClient";
 import serviceServer from "@/appwriteServer";
 import { ID } from "appwrite";
 import { namespaceExists, indexName, generateDocs } from "@/lib/langchain";
+import { auth, currentUser } from '@clerk/nextjs/server'
 
 export async function POST(request: NextRequest) {
   console.log("🚀 Starting PDF processing...");
+  const { userId } = await auth()
+
   try {
     const formData = await request.formData();
     const pdfId = formData.get('fileId') as string;
@@ -59,24 +62,26 @@ export async function POST(request: NextRequest) {
       );
       // generate docs start here
       const documents = await generateDocs(pdfId);
+
       // generate docs end here
       // Store documents in Pinecone
-      // console.log("💾 Storing document chunks in Pinecone...");
-      // pineconeVectorStore = await PineconeStore.fromDocuments(
-      //   documents,
-      //   embeddings,
-      //   {
-      //     pineconeIndex: index,
-      //     namespace: pdfId,
-      //   }
-      // );
-      // console.log("✅ pineconeVectorStore contains: ", pineconeVectorStore);
+      console.log("💾 Storing document chunks in Pinecone...");
+      pineconeVectorStore = await PineconeStore.fromDocuments(
+        documents,
+        embeddings,
+        {
+          pineconeIndex: index,
+          namespace: pdfId,
+        }
+      );
+      console.log("✅ pineconeVectorStore contains: ", pineconeVectorStore);
 
       console.log("📊 Storage details:", {
         namespace: pdfId,
         chunksToStore: documents.length,
         indexName: "chatwithpdf",
       });
+
       console.log("🎉 Processing complete! Sending response...");
       return new NextResponse(
         JSON.stringify({

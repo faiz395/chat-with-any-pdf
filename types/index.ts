@@ -1,8 +1,24 @@
+export interface Citation {
+  pageNumber: number;
+  text: string;
+  highlight: string;
+}
+
+export interface Reaction {
+  emoji: string;
+  count: number;
+  users: string[];
+}
+
 export interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: 'user' | 'model';
   content: string;
   timestamp: Date;
+  citations?: Citation[];
+  reactions?: Reaction[];
+  parentMessageId?: string; // For threading
+  status?: 'sending' | 'sent' | 'error';
 }
 
 export interface PDFDocument {
@@ -11,6 +27,6 @@ export interface PDFDocument {
   fileName: string;
   documentUrl: string;
   userId: string;
-  contentHash: string;
-  createdAt: Date;
+  contentHash?: string;
+  $createdAt: Date;
 }

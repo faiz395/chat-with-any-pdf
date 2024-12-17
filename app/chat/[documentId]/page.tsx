@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 import { redirect } from 'next/navigation';
 import serviceServer from '@/appwriteServer';
+import { PDFDocument } from '@/types';
 
 interface ChatPageProps {
   params: {
@@ -27,9 +28,18 @@ export default async function ChatPage({ params }: ChatPageProps) {
       redirect('/dashboard');
     }
 
+    const doc: PDFDocument = {
+      $id: document.$id,
+      documentId: document.documentId,
+      fileName: document.fileName,
+      documentUrl: document.documentUrl,
+      userId: document.userId,
+      $createdAt: new Date(document.$createdAt),
+    };
+
     return (
       <div className="h-screen">
-        <ChatContainer document={document} />
+        <ChatContainer document={doc} />
       </div>
     );
   } catch (error) {

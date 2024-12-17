@@ -34,12 +34,17 @@ export async function generateDocs(pdfId: string) {
     if (!pdfFile) {
       console.error("❌ Failed to retrieve PDF from Appwrite");
     }
+    console.log("pdf file: ", pdfFile);
+    
     console.log("🔄 Converting file to buffer...");
     const buffer = Buffer.from(pdfFile);
     console.log("✅ Buffer created successfully:", {
       bufferSize: `${(buffer.length / 1024 / 1024).toFixed(2)}MB`,
     });
-
+    console.log("📝 Received PDF ID:", pdfId);
+    
+    await serviceServer.addNewDocumentToDb(pdfId, userId);
+    console.log("✅ Document added to database");
     // Create a Blob from the buffer
     console.log("🔄 Creating Blob from buffer...");
     const blob = new Blob([buffer], { type: "application/pdf" });

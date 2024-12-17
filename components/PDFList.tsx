@@ -33,7 +33,7 @@ export default function PDFList({ documents }: PDFListProps) {
                   {doc.fileName}
                 </h3>
                 <p className="text-sm text-gray-500">
-                  {formatDistanceToNow(new Date(doc.createdAt), { addSuffix: true })}
+                  {formatDistanceToNow(new Date(doc.$createdAt), { addSuffix: true })}
                 </p>
               </div>
             </div>

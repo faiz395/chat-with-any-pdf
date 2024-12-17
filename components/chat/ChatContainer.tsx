@@ -27,6 +27,7 @@ export default function ChatContainer({ document }: ChatContainerProps) {
         content,
         timestamp: new Date()
       };
+      
       setMessages(prev => [...prev, userMessage]);
 
       // API call
@@ -94,7 +95,7 @@ export default function ChatContainer({ document }: ChatContainerProps) {
         </div>
 
         {/* Chat Input */}
-        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+        <ChatInput documentId={document.documentId} onSendMessage={handleSendMessage} isLoading={isLoading} />
       </div>
     </div>
   );

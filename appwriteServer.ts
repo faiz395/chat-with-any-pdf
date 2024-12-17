@@ -2,8 +2,6 @@ import { Query } from "appwrite";
 import { Client, Databases, Storage, ID, Models } from "node-appwrite";
 import { InputFile } from "node-appwrite/file";
 
-
-
 // Helper function to assert that environment variables are defined
 function getEnvVar(key: string): string {
   const value = process.env[key];
@@ -69,15 +67,18 @@ class ServiceServer {
     }
   }
 
-  async addNewDocumentToDb({
-    documentId,
-    documentUrl,
-    userId,
-  }: {
-    documentId: string;
-    documentUrl: string;
-    userId: string;
-  }) {
+  async addNewDocumentToDb( documentId: string, userId: string
+    // {
+    // documentId,
+    // documentUrl,
+    // userId,
+  // }: {
+    // documentId: string;
+    // documentUrl?: string;
+    // userId?: string;
+  // }
+) {
+  const documentUrl = `https://cloud.appwrite.io/v1/storage/buckets/${storageId}/files/${documentId}/view?project=${projectId}`;
     try {
       const res = await this.databases.createDocument(
         databaseId as string,
@@ -154,36 +155,52 @@ class ServiceServer {
       console.log("error from getChatFromDb: ", error);
     }
   }
-// In your appwriteServer.ts or similar file
-async addNewPdfToBucket(file: File) {
-  const uniqueId = ID.unique();
-
-  try {
-    console.log("Starting file upload to bucket...", {
-      storageId,
-      uniqueId,
-      fileName: file.name
-    });
-
-    // Convert File to Blob first
-    const blob = new Blob([await file.arrayBuffer()], { type: file.type });
-
-    // Use InputFile.fromBlob method
-    const inputFile = InputFile.fromBuffer(blob, file.name);
-
-    const res = await this.bucket.createFile(
-      storageId as string,
-      uniqueId as string,
-      inputFile
-    );
-
-    console.log("File uploaded successfully:", res);
-    return res;
-  } catch (error) {
-    console.error("Detailed Error in addNewPdfToBucket:", error);
-    throw error;
+  async createDocuments(userId: string, documentId: string) {
+    try {
+      const res = await this.databases.createDocument(
+        databaseId as string,
+        documentsCollectionId as string,
+        ID.unique(),
+        {
+          userId,
+          documentId,
+        }
+      );
+      return res;
+    } catch (error) {
+      console.error("Error in createDocuments:", error);
+    }
   }
-}
+  // In your appwriteServer.ts or similar file
+  async addNewPdfToBucket(file: File) {
+    const uniqueId = ID.unique();
+
+    try {
+      console.log("Starting file upload to bucket...", {
+        storageId,
+        uniqueId,
+        fileName: file.name
+      });
+
+      // Convert File to Blob first
+      const blob = new Blob([await file.arrayBuffer()], { type: file.type });
+
+      // Use InputFile.fromBlob method
+      const inputFile = InputFile.fromBuffer(blob, file.name);
+
+      const res = await this.bucket.createFile(
+        storageId as string,
+        uniqueId as string,
+        inputFile
+      );
+
+      console.log("File uploaded successfully:", res);
+      return res;
+    } catch (error) {
+      console.error("Detailed Error in addNewPdfToBucket:", error);
+      throw error;
+    }
+  }
 
 
   // write a function to get a file from th bucket if the id is provided
@@ -221,6 +238,93 @@ async addNewPdfToBucket(file: File) {
       return response.documents;
     } catch (error) {
       console.error("Error in getUserDocuments:", error);
+      throw error;
+    }
+  }
+
+  async createMessage(message: any) {
+    // \\
+    console.log('this function is created by ai');
+    
+    try {
+      const response = await this.databases.createDocument(
+        databaseId as string,
+        chatsCollectionId as string,
+        ID.unique(),
+        {
+          ...message,
+          // timestamp: new Date(message.timestamp).toISOString(),
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error in createMessage:", error);
+      throw error;
+    }
+  }
+
+  async getMessagesByDocument(documentId: string, limit: number = 50, offset: number = 0) {
+    try {
+      const response = await this.databases.listDocuments(
+        databaseId as string,
+        chatsCollectionId as string,
+        [
+          Query.equal("documentId", documentId),
+          Query.orderDesc("timestamp"),
+          Query.limit(limit),
+          Query.offset(offset),
+        ]
+      );
+      return response.documents;
+    } catch (error) {
+      console.error("Error in getMessagesByDocument:", error);
+      throw error;
+    }
+  }
+
+  async addReactionToMessage(messageId: string, userId: string, emoji: string) {
+    try {
+      const message = await this.databases.getDocument(
+        databaseId as string,
+        chatsCollectionId as string,
+        messageId
+      );
+
+      const reactions = message.reactions || [];
+      const existingReactionIndex = reactions.findIndex(r => r.emoji === emoji);
+
+      if (existingReactionIndex !== -1) {
+        const reaction = reactions[existingReactionIndex];
+        if (reaction.users.includes(userId)) {
+          // Remove user's reaction
+          reaction.users = reaction.users.filter(u => u !== userId);
+          reaction.count--;
+          if (reaction.count === 0) {
+            reactions.splice(existingReactionIndex, 1);
+          }
+        } else {
+          // Add user's reaction
+          reaction.users.push(userId);
+          reaction.count++;
+        }
+      } else {
+        // Create new reaction
+        reactions.push({
+          emoji,
+          count: 1,
+          users: [userId],
+        });
+      }
+
+      const response = await this.databases.updateDocument(
+        databaseId as string,
+        chatsCollectionId as string,
+        messageId,
+        { reactions }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error in addReactionToMessage:", error);
       throw error;
     }
   }
