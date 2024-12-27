@@ -7,7 +7,6 @@ import serviceServer from '@/appwriteServer';
 import { auth } from "@clerk/nextjs/server";
 import { PDFDocument } from '@/types'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 
 
 async function page() {
@@ -31,26 +30,10 @@ async function page() {
   return (
     <>
       <div className="container mx-auto py-10 bg-indigo-50">
-        
         <div className='my-10 flex flex-col justify-center items-center'>
-        <h1 className="text-2xl font-bold mb-6">Upload Your PDF</h1>
-        <Link href="/dashboard/upload">
-          <Button>+</Button>
-        </Link>
+        <FileUploader />
         </div>
       </div>
-    <div className='bg-indigo-50 flex justify-center items-center h-full max-w-7xl mx-auto my-5 py-6'>
-      <div className=" max-w-4xl text-center">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white sm:text-xl lg:text-2xl">
-          My Documents
-        </h3>
-        <div className='my-10 flex justify-center items-center'>
-          {/* <PlaceholderDocument /> */}
-          <PDFList documents={doc}/>
-          
-        </div>
-      </div>
-    </div>
     </>
   )
 }

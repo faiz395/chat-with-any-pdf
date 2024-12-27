@@ -1,19 +1,59 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Message, PDFDocument } from '@/types';
 import MessageItem from './MessageItem';
 import ChatInput from './ChatInput';
 import PdfViewer from '../PdfView';
-
+import { useAuth } from '@clerk/nextjs'
+import serviceClient from '@/appwriteClient';
+import { Query, ID } from 'appwrite';
 interface ChatContainerProps {
   document: PDFDocument;
 }
+import { useToast } from "@/hooks/use-toast";
+
 
 export default function ChatContainer({ document }: ChatContainerProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { isLoaded, userId } = useAuth()
+  const { toast } = useToast()
+
+  console.log("document.$id: ", document.$id);
+  
+  useEffect(()=>{
+    try {
+      serviceClient.getChatFromDb(userId!, document.documentId).then((res: any) => {
+      if (!res) {
+        console.log("no res from db");
+        return;
+      }
+      let newMessages: Message[] = res.documents.map((doc: any) => ({
+        id: ID.unique(),
+        role: doc.role,
+        content: doc.message,
+        $createdAt: new Date(doc.$createdAt),
+      }));
+      if(res.documents.length === 0){
+        // newMessages = [
+        //   {
+        //     id: ID.unique(),
+        //     role: 'model',
+        //     content: 'Hello! I am your PDF assistant. How can I help you today?',
+        //     $createdAt: new Date(),
+        //   }
+        // ];
+      }
+      console.log("newMessages", newMessages);
+      setMessages(newMessages);
+    });
+    } catch (error) {
+      console.log("error from getChatFromDb: ", error);
+      
+    }
+  },[userId,document]);
 
   const handleSendMessage = async (content: string) => {
     try {
@@ -22,10 +62,10 @@ export default function ChatContainer({ document }: ChatContainerProps) {
       
       // Optimistic update
       const userMessage: Message = {
-        id: Date.now().toString(),
+        id: ID.unique(),
         role: 'user',
         content,
-        timestamp: new Date()
+        $createdAt: new Date()
       };
       
       setMessages(prev => [...prev, userMessage]);
@@ -42,6 +82,13 @@ export default function ChatContainer({ document }: ChatContainerProps) {
       });
 
       if (!response.ok) {
+        toast({
+          title: "Something went wrong",
+          description: "Please try again later.",
+          // action: (
+          //   <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+          // ),
+        })
         throw new Error('Failed to get response');
       }
 
@@ -49,10 +96,10 @@ export default function ChatContainer({ document }: ChatContainerProps) {
       
       // Add AI response to messages
       setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        role: 'assistant',
+        id: ID.unique(),
+        role: 'model',
         content: aiResponse.message,
-        timestamp: new Date()
+        $createdAt: new Date()
       }]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -60,6 +107,11 @@ export default function ChatContainer({ document }: ChatContainerProps) {
       setIsLoading(false);
     }
   };
+
+  // In case the user signs out while on the page.
+  if (!isLoaded || !userId) {
+    return null
+  }
 
   return (
     <div className="flex h-screen bg-white">

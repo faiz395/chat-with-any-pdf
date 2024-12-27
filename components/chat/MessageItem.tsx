@@ -83,8 +83,8 @@ export default function MessageItem({ message, onReply, onReact }: MessageItemPr
                   // TODO: Implement scroll to page in PDF viewer
                 }}
               >
-                <div className="font-medium">Page {citation.pageNumber}</div>
-                <div className="text-sm opacity-80">{citation.highlight}</div>
+                {/* <div className="font-medium">Page {citation.pageNumber}</div>
+                <div className="text-sm opacity-80">{citation.highlight}</div> */}
               </div>
             ))}
           </div>
@@ -93,7 +93,7 @@ export default function MessageItem({ message, onReply, onReact }: MessageItemPr
         {/* Message Actions */}
         <div className="mt-2 flex items-center justify-between text-sm">
           <div className="text-xs opacity-70">
-            {formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })}
+            {formatDistanceToNow(new Date(message.$createdAt), { addSuffix: true })}
           </div>
           
           <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">

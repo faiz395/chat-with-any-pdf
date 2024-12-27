@@ -1,4 +1,5 @@
 import { Client, Account, Databases, Storage, ID } from "appwrite";
+import { Query } from "node-appwrite";
 
 // Helper function to assert that environment variables are defined
 function getEnvVar(key: string): string {
@@ -93,11 +94,17 @@ class ServiceClient {
     }
   }
 
-  async getChatFromDb(queries : string[]){
+  async getChatFromDb(userId: string, documentId: string){
     console.log("called getChatFromDb");
-    
+    console.log("userdId: ", userId);
+    console.log("documentId: ", documentId);
+        
     try {
-      const res = await this.databases.listDocuments(databaseId as string, chatsCollectionId as string, queries as string[]);
+      const res = await this.databases.listDocuments(databaseId as string, chatsCollectionId as string, [
+        Query.equal("userId", userId as string),
+        Query.equal("documentId", documentId),
+        Query.orderAsc("$createdAt")
+      ]);
       console.log("getChatFromDb res: ",res);
       return res;   
     } catch (error) {
