@@ -291,13 +291,13 @@ class ServiceServer {
       );
 
       const reactions = message.reactions || [];
-      const existingReactionIndex = reactions.findIndex(r => r.emoji === emoji);
+      const existingReactionIndex = reactions.findIndex((r:any) => r.emoji === emoji);
 
       if (existingReactionIndex !== -1) {
         const reaction = reactions[existingReactionIndex];
         if (reaction.users.includes(userId)) {
           // Remove user's reaction
-          reaction.users = reaction.users.filter(u => u !== userId);
+          reaction.users = reaction.users.filter((u: any) => u !== userId);
           reaction.count--;
           if (reaction.count === 0) {
             reactions.splice(existingReactionIndex, 1);

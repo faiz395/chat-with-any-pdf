@@ -40,7 +40,7 @@ export async function GET() {
         console.error('Pinecone connection test failed:', error);
         return NextResponse.json({ 
             success: false, 
-            message: error.message 
+            message: error, 
         }, { status: 500 });
     }
 }

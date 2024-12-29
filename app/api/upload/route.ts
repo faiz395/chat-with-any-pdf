@@ -95,8 +95,6 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-
-
   } catch (error: any) {
     console.error("❌ Request processing error:", {
       error: error.message,

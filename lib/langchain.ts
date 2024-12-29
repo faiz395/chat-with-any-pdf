@@ -63,10 +63,12 @@ export async function generateDocs(pdfId: string) {
     // Split the text into chunks
     console.log("✂️ Splitting document into chunks...");
     const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 2000,
-      chunkOverlap: 200,
+      chunkSize: 500,
+      chunkOverlap: 50,
+      separators: ["\n\n", "\n"," "],
     });
     const documents = await textSplitter.splitDocuments(pages);
+    console.log("📑 Document splitting complete:", documents)
     console.log("📑 Document splitting complete:", {
       totalChunks: documents.length,
       averageChunkSize:
