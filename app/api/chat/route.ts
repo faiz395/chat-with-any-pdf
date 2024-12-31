@@ -20,7 +20,6 @@ const modelLLM = new ChatGoogleGenerativeAI({
   model: "gemini-pro",
   apiKey: process.env.GEMINI_API_KEY,
   // maxOutputTokens: 2048,
-  temperature: 0,
 });
 
 const embeddings = new GoogleGenerativeAIEmbeddings({
@@ -120,7 +119,7 @@ export async function POST(request: NextRequest) {
         const retrieverChain = RunnableSequence.from([
           prevResult => prevResult.question,
           async (question) => {
-            const results = await vectorStore.similaritySearch(question, 5);
+            const results = await vectorStore.similaritySearch(question, 10);
             return combineDocs(results);
           }
         ]);

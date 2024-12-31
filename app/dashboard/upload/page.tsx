@@ -29,10 +29,10 @@ async function page() {
   
   return (
     <>
-      <div className="container mx-auto py-10 bg-indigo-50">
-        <div className='my-10 flex flex-col justify-center items-center'>
+      <div className="container mx-auto bg-indigo-50">
         <FileUploader />
-        </div>
+        {/* <div className='flex flex-col justify-center items-center'>
+        </div> */}
       </div>
     </>
   )

@@ -5,6 +5,8 @@ import React, { useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { Loader2Icon, Upload } from 'lucide-react';
 import serviceClient from '@/appwriteClient';
+import { useToast } from "@/hooks/use-toast"
+
 
 // import React, { useCallback, useState } from 'react';
 // import { useDropzone } from 'react-dropzone';
@@ -145,6 +147,7 @@ function FileUploader() {
   const [error, setError] = React.useState<string | null>(null);
   const [progress, setProgress] = React.useState<number | null>(null);
   const router = useRouter();
+  const { toast } = useToast()
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -214,10 +217,21 @@ function FileUploader() {
       const data = await response.json();
 
       if (!response.ok) {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request. Please try again later.",
+        })
         throw new Error(data.error || data.details || 'Upload failed');
       }
 
       setProgress(100);
+      if(response?.ok){
+        toast({
+          title: "Success!",
+          description: "Document uploaded successfully.",   
+        })
+      }
       console.log('Upload successful:', data);
       
       // Optional: wait a bit to show 100% progress
@@ -242,15 +256,14 @@ function FileUploader() {
   });
 
   return (
-    <div className='min-h-screen flex flex-col justify-center items-center bg-indigo-50 p-4'>
       <div
         {...getRootProps()}
-        className={`w-full max-w-xl p-8 text-center border-2 border-dashed rounded-lg transition-all duration-200 ease-in-out ${
+        className={`border-4 w-[100%] h-[100%] border-dashed rounded-lg transition-all duration-200 ease-in-out bg-indigo-50 ${
           isDragActive ? 'border-indigo-600 bg-indigo-100' : 'border-gray-300'
         }`}
       >
         <input {...getInputProps()} />
-        <div className="space-y-4">
+        <div className="min-h-screen w-full h-full flex flex-col justify-center items-center p-4">
           {uploading ? (
             <div className="flex flex-col items-center space-y-2">
               <Loader2Icon className="w-8 h-8 animate-spin text-indigo-600" />
@@ -281,7 +294,6 @@ function FileUploader() {
           )}
         </div>
       </div>
-    </div>
   );
 }
 
