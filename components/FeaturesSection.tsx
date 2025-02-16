@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, ShieldCheck, Smartphone, Gift } from 'lucide-react';
+// import { FileText, ShieldCheck, Smartphone, Gift } from 'lucide-react';
 import { Zap, Search, Upload, Lock, BookOpen, MonitorSmartphone } from 'lucide-react';
 
 

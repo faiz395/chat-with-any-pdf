@@ -12,15 +12,15 @@ interface ChatLayoutProps {
   document: PDFDocument;
 }
 
-interface MessageListProps {
-  documentId: string;
-}
+// interface MessageListProps {
+//   documentId: string;
+// }
 
-interface ChatInputProps {
-  documentId: string;
-  onSendMessage: (message: string) => void;
-  isLoading: boolean;
-}
+// interface ChatInputProps {
+//   documentId: string;
+//   onSendMessage: (message: string) => void;
+//   isLoading: boolean;
+// }
 
 export default function ChatLayout({ document }: ChatLayoutProps) {
   const [showPdf, setShowPdf] = useState(true);

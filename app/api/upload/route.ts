@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+// import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+// import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { PineconeStore } from "@langchain/pinecone";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import pineconeClient from "@/lib/pinecone";
-import serviceClient from "@/appwriteClient";
-import serviceServer from "@/appwriteServer";
-import { ID } from "appwrite";
+// import serviceClient from "@/appwriteClient";
+// import serviceServer from "@/appwriteServer";
+// import { ID } from "appwrite";
 import { namespaceExists, indexName, generateDocs } from "@/lib/langchain";
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 
 export async function POST(request: NextRequest) {
   console.log("🚀 Starting PDF processing...");
-  const { userId } = await auth()
+  // const { userId } = await auth()
 
   try {
     const formData = await request.formData();
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Initialize Pinecone client
     console.log("🔄 Connecting to Pinecone...");
     const pinecone = pineconeClient;
-    const pineconeIndex = pinecone.Index("chatwithpdf");
+    // const pineconeIndex = pinecone.Index("chatwithpdf");
     console.log("✅ Pinecone connection established");
     const index = await pineconeClient.index(indexName);
 
@@ -95,10 +95,11 @@ export async function POST(request: NextRequest) {
         }
       );
     }
+    // @ts-ignore
   } catch (error: any) {
     console.error("❌ Request processing error:", {
-      error: error.message,
-      stack: error.stack,
+      error: error?.message,
+      stack: error?.stack,
     });
     return new NextResponse(
       JSON.stringify({

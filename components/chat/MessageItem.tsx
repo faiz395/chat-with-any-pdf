@@ -1,8 +1,8 @@
 'use client';
 
-import { Message, Reaction } from '@/types';
+import { Message } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
-import { Copy, ThumbsUp, MessageCircle, Bookmark } from 'lucide-react';
+import { Copy, ThumbsUp, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -49,13 +49,14 @@ export default function MessageItem({ message, onReply, onReact }: MessageItemPr
             remarkPlugins={[remarkGfm, remarkMath]}
             rehypePlugins={[rehypeKatex]}
             components={{
-              code({ node, inline, className, children, ...props }) {
+              // @ts-ignore
+              code({ node, className, children, ref: _ignoredRef, style: _ignoredStyle, ...props }) {
                 const match = /language-(\w+)/.exec(className || '');
-                return !inline && match ? (
+                return match ? (
                   <SyntaxHighlighter
-                    style={vscDarkPlus}
                     language={match[1]}
                     PreTag="div"
+                    style={vscDarkPlus}
                     {...props}
                   >
                     {String(children).replace(/\n$/, '')}
@@ -65,7 +66,7 @@ export default function MessageItem({ message, onReply, onReact }: MessageItemPr
                     {children}
                   </code>
                 );
-              },
+              }
             }}
           >
             {message.content}

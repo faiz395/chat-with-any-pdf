@@ -7,7 +7,7 @@ import ChatInput from './ChatInput';
 import PdfViewer from '../PdfView';
 import { useAuth } from '@clerk/nextjs'
 import serviceClient from '@/appwriteClient';
-import { Query, ID } from 'appwrite';
+import { ID } from 'appwrite';
 interface ChatContainerProps {
   document: PDFDocument;
 }
@@ -25,12 +25,12 @@ export default function ChatContainer({ document }: ChatContainerProps) {
   
   useEffect(()=>{
     try {
-      serviceClient.getChatFromDb(userId!, document.documentId).then((res: any) => {
+      serviceClient.getChatFromDb(userId!, document.documentId).then((res) => {
       if (!res) {
         console.log("no res from db");
         return;
       }
-      let newMessages: Message[] = res.documents.map((doc: any) => ({
+      let newMessages: Message[] = res.documents.map((doc) => ({
         id: ID.unique(),
         role: doc.role,
         content: doc.message,

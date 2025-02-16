@@ -7,7 +7,7 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence, RunnablePassthrough } from "@langchain/core/runnables";
-import { SystemMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
+import { HumanMessage, AIMessage } from "@langchain/core/messages";
 import pineconeClient from "@/lib/pinecone";
 import { indexName } from "@/lib/langchain";
 import { auth } from '@clerk/nextjs/server';
@@ -15,7 +15,7 @@ import serviceServer from "@/appwriteServer";
 
 // Initialize Google AI and embeddings
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-
+console.log(genAI);
 const modelLLM = new ChatGoogleGenerativeAI({
   model: "gemini-pro",
   apiKey: process.env.GEMINI_API_KEY,
@@ -34,7 +34,7 @@ const preprocessContext = (context: string) => {
     .replace(/\s+/g, ' ')
     .trim();
 };
-
+// @ts-ignore
 const combineDocs = (docs: any[]) => {
   const combinedText = docs
     .map(doc => preprocessContext(doc.pageContent))

@@ -19,23 +19,23 @@ const documentsCollectionId =
 const chatsCollectionId = process.env.NEXT_PUBLIC_APPWRITE_CHATS_COLLECTION_ID;
 const storageId = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_ID;
 
-console.log("Environment variables loaded:", {
-  projectId,
-  endPointUrl,
-  databaseId,
-  usersCollectionId,
-  documentsCollectionId,
-  storageId,
-});
+// console.log("Environment variables loaded:", {
+//   projectId,
+//   endPointUrl,
+//   databaseId,
+//   usersCollectionId,
+//   documentsCollectionId,
+//   storageId,
+// });
 
-console.log(
-  typeof projectId,
-  typeof endPointUrl,
-  typeof databaseId,
-  typeof usersCollectionId,
-  typeof documentsCollectionId,
-  typeof storageId
-);
+// console.log(
+//   typeof projectId,
+//   typeof endPointUrl,
+//   typeof databaseId,
+//   typeof usersCollectionId,
+//   typeof documentsCollectionId,
+//   typeof storageId
+// );
 
 class ServiceClient {
   client = new Client();

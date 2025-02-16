@@ -11,6 +11,8 @@ interface MessageListProps {
 
 export default function MessageList({ documentId }: MessageListProps) {
   const [messages, setMessages] = useState<Message[]>([]);
+  console.log("setMessages: ", setMessages);
+  
   const [loading, setLoading] = useState(true);
   const parentRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);

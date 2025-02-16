@@ -20,7 +20,8 @@ function PdfView({ url, fileId }: PdfViewProps) {
   const [error, setError] = useState<string | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [initialPagesLoaded, setInitialPagesLoaded] = useState(false);
-
+  console.log("PdfView",pdfUrl);
+  console.log("rotation",rotation)
   useEffect(() => {
     const fetchFile = async () => {
       try {

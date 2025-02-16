@@ -5,7 +5,7 @@ import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 import pineconeClient from "@/lib/pinecone";
 import { auth } from "@clerk/nextjs/server";
 import serviceServer from "@/appwriteServer";
-import { Query } from "appwrite";
+// import { Query } from "appwrite";
 
 /**
  * Processes a PDF file and generates embeddings stored in Pinecone
@@ -24,7 +24,7 @@ export async function generateEmbeddingsInPineconeVectorStore(
     // 1. Load and parse PDF
 
     console.log('📚 Loading PDF document...');
-
+    // @ts-ignore
     let response = await serviceServer.getPdfDownloadFromBucketById(docId);
 
     console.log("ref: ", response);
@@ -89,7 +89,7 @@ export async function generateDocs(docId: string) {
     // 1. Load and parse PDF
     console.log('📚 Loading PDF document...');
 
-    let ref = await serviceServer.getDocumentsById(docId);
+    const ref = await serviceServer.getDocumentsById(docId);
 
     console.log("ref: ", ref?.documents[0].documentUrl);
 

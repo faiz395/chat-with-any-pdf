@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
   import { useDropzone } from 'react-dropzone'
 import { useRouter } from 'next/navigation';
 import { Loader2Icon, Upload } from 'lucide-react';
@@ -237,7 +237,7 @@ function FileUploader() {
       // Optional: wait a bit to show 100% progress
       await new Promise(resolve => setTimeout(resolve, 500));
       router.push('/dashboard');
-
+      // @ts-ignore
     } catch (error: any) {
       console.error('Upload error:', error);
       setError(error.message || "Failed to upload file");
@@ -245,7 +245,7 @@ function FileUploader() {
     } finally {
       setUploading(false);
     }
-  }, [router]);
+  }, [router, toast]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

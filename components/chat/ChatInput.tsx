@@ -10,6 +10,7 @@ interface ChatInputProps {
 }
 
 export default function ChatInput({ documentId, onSendMessage, isLoading }: ChatInputProps) {
+  console.log("documentId: ", documentId);
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

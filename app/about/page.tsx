@@ -173,7 +173,7 @@ export default function About() {
                 className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-300"
               >
                 <p className="text-gray-600 dark:text-gray-300 italic">
-                  "{testimonial.feedback}"
+                &quot;{testimonial.feedback}&quot;
                 </p>
                 <p className="mt-4 font-medium text-gray-900 dark:text-white">
                   - {testimonial.name}

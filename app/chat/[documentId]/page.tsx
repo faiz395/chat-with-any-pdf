@@ -1,7 +1,6 @@
 import ChatContainer from '@/components/chat/ChatContainer';
 // import { auth } from '@clerk/nextjs';
 import { auth } from "@clerk/nextjs/server";
-
 import { redirect } from 'next/navigation';
 import serviceServer from '@/appwriteServer';
 import { PDFDocument } from '@/types';

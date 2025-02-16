@@ -15,29 +15,28 @@ const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID;
 const endPointUrl = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
 const databaseId = process.env.NEXT_PUBLIC_APPWRITE_DB_ID;
 const usersCollectionId = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
-const documentsCollectionId =
-  process.env.NEXT_PUBLIC_APPWRITE_DOCUMENTS_COLLECTION_ID;
+const documentsCollectionId = process.env.NEXT_PUBLIC_APPWRITE_DOCUMENTS_COLLECTION_ID;
 const chatsCollectionId = process.env.NEXT_PUBLIC_APPWRITE_CHATS_COLLECTION_ID;
 
 const storageId = process.env.NEXT_PUBLIC_APPWRITE_STORAGE_ID;
 
-console.log("Environment variables loaded:", {
-  projectId,
-  endPointUrl,
-  databaseId,
-  usersCollectionId,
-  documentsCollectionId,
-  storageId,
-});
+// console.log("Environment variables loaded:", {
+//   projectId,
+//   endPointUrl,
+//   databaseId,
+//   usersCollectionId,
+//   documentsCollectionId,
+//   storageId,
+// });
 
-console.log(
-  typeof projectId,
-  typeof endPointUrl,
-  typeof databaseId,
-  typeof usersCollectionId,
-  typeof documentsCollectionId,
-  typeof storageId
-);
+// console.log(
+//   typeof projectId,
+//   typeof endPointUrl,
+//   typeof databaseId,
+//   typeof usersCollectionId,
+//   typeof documentsCollectionId,
+//   typeof storageId
+// );
 
 class ServiceServer {
   // let client, projectId, endPointUrl;
@@ -327,6 +326,88 @@ class ServiceServer {
       console.error("Error in addReactionToMessage:", error);
       throw error;
     }
+  }
+
+  /**
+   * DELETE: Deletes pdf from bucket by its id
+   */
+  async deletePdfFromBucketById(fileId: string) {
+    try {
+      const res = await this.bucket.deleteFile(storageId as string, fileId as string);
+      console.log("✅ File deleted successfully from storage:", res);
+      return true;
+    } catch (error) {
+      console.error("Error in deleteFileFromBucket:", error);
+      return false;
+    }
+  }
+
+  /**
+   * DELETE: Deletes document from documents table by its id
+   */
+  async deleteDocumentFromDocumentsTableById(id: string) {
+    console.log("trying to delete document from database");
+
+    // 1. get list of all documents from documents table that has the documentId = id from chats table
+    const res = await this.databases.listDocuments(
+      databaseId as string,
+      documentsCollectionId as string,
+      [
+        Query.equal("documentId", id),
+      ]
+    );
+    // 2. delete each document from documents table
+    console.log("res from deleteDocumentFromDocumentsTableById: ", res);
+    try {
+    res.documents.forEach(async (doc) => {
+      console.log("tryingtodeletethisdoc: ", doc);
+      try {
+        await this.databases.deleteDocument(
+          databaseId as string,
+          documentsCollectionId as string,
+          doc.$id
+        )
+      } catch (error) {
+        console.error("Error in deleteDocumentFromDocumentsTableById:", error);
+      }
+    });
+    // 3. wait for all promises to resolve
+    } catch (error) {
+      console.error("Error in deleteDocumentFromDocumentsTableById:", error);
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * DELETE: Deletes document from chats table by its id
+   */
+  async deleteDocumentFromChatsTableById(id: string) {
+    // 1. get list of all documents from chats table that has the documentId = id from chats table
+    const res = await this.databases.listDocuments(
+      databaseId as string,
+      chatsCollectionId as string,
+      [
+        Query.equal("documentId", id),
+      ]
+    );
+    // console.log("res from deleteDocumentFromChatsTableById: ", res);
+    try {
+    // 2. delete each document from chats table
+    res.documents.forEach(async (doc) => {
+      await this.databases.deleteDocument(
+        databaseId as string,
+        chatsCollectionId as string,
+        doc.$id
+      )
+      console.log("Document deleted successfully from chats table: ", doc);
+    });
+
+    } catch (error) {
+      console.error("Error in deleteDocumentFromChatsTableById:", error);
+      return false;
+    }
+    return true;
   }
 }
 

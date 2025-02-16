@@ -16,7 +16,7 @@ export default function TestimonialsSection() {
               { name: "Mark Lee", feedback: "Finally, a tool that lets me extract key data in seconds!" },
             ].map((testimonial, idx) => (
               <div key={idx} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                <p className="text-lg text-gray-700 dark:text-gray-300">"{testimonial.feedback}"</p>
+                <p className="text-lg text-gray-700 dark:text-gray-300">&quot;{testimonial.feedback}&quot;</p>
                 <h4 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
                   - {testimonial.name}
                 </h4>

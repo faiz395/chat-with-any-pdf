@@ -12,4 +12,15 @@ const pineconeClient = new Pinecone({
 
 export const pineconeIndex = pineconeClient.index(PINECONE_INDEX_NAME);
 
+export async function delteComplteNameSpaceById(id: string) {
+    try {
+        const res = await pineconeIndex.namespace(id).deleteAll();
+        console.log(res);
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 export default pineconeClient;

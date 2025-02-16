@@ -1,12 +1,12 @@
 import FileUploader from '@/components/FileUploader'
-import PDFList from '@/components/PDFList'
-import PlaceholderDocument from '@/components/PlaceholderDocument'
+// import PDFList from '@/components/PDFList'
+// import PlaceholderDocument from '@/components/PlaceholderDocument'
 import React from 'react'
 import { redirect } from 'next/navigation'
 import serviceServer from '@/appwriteServer';
 import { auth } from "@clerk/nextjs/server";
 import { PDFDocument } from '@/types'
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button'
 
 
 async function page() {
@@ -16,6 +16,7 @@ async function page() {
     redirect('/sign-in');
   }
   const documents = await serviceServer.getUserDocuments(userId);
+  // @ts-ignore
   const doc: PDFDocument[]= documents.map((doc: any) => ({
     $id: doc.$id,
     documentId: doc.documentId,
@@ -24,7 +25,8 @@ async function page() {
     userId: doc.userId,
     $createdAt: doc.$createdAt,
   }))
-
+  console.log("doc: ", doc);
+  
   console.log("documents: ", documents);
   
   return (

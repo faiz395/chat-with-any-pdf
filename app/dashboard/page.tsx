@@ -1,6 +1,6 @@
-import FileUploader from '@/components/FileUploader'
+// import FileUploader from '@/components/FileUploader'
 import PDFList from '@/components/PDFList'
-import PlaceholderDocument from '@/components/PlaceholderDocument'
+// import PlaceholderDocument from '@/components/PlaceholderDocument'
 import React from 'react'
 import { redirect } from 'next/navigation'
 import serviceServer from '@/appwriteServer';
@@ -17,6 +17,8 @@ async function page() {
     redirect('/sign-in');
   }
   const documents = await serviceServer.getUserDocuments(userId);
+  console.log("documents: ", documents);
+  // @ts-ignore
   const doc: PDFDocument[]= documents.map((doc: any) => ({
     $id: doc.$id,
     documentId: doc.documentId,
@@ -26,7 +28,7 @@ async function page() {
     $createdAt: doc.$createdAt,
   }))
 
-  console.log("documents: ", documents);
+  // console.log("documents: ", documents);
   
   return (
     <>
