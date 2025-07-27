@@ -112,6 +112,8 @@ export default function ChatContainer({ document }: ChatContainerProps) {
             </div>
           </div>
           {/* PDF toggle button (floating) */}
+
+          {/* 
           {!pdfOpen && (
             <button
               className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-indigo-600 text-white px-6 py-2 rounded-full shadow-lg md:hidden"
@@ -120,6 +122,7 @@ export default function ChatContainer({ document }: ChatContainerProps) {
               Show PDF
             </button>
           )}
+           */}
         </div>
       </div>
 
@@ -143,9 +146,24 @@ export default function ChatContainer({ document }: ChatContainerProps) {
           )}
           {error && <div className="text-red-500 p-4 text-center">{error}</div>}
         </div>
-        {/* Chat Input (sticky on mobile/tablet) */}
+        {/* Chat Input (sticky on mobile/tablet) with Show PDF button on mobile */}
         <div className="sticky bottom-0 z-20 bg-white dark:bg-gray-900 border-t border-gray-200">
-          <ChatInput documentId={document.documentId} onSendMessage={handleSendMessage} isLoading={isLoading} />
+          <div className="flex items-end gap-2 p-2 md:p-0">
+            {/* Show PDF button only on mobile, right of input */}
+            <div className="md:hidden flex-shrink-0">
+              {!pdfOpen && (
+                <button
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-full shadow-lg transition"
+                  onClick={() => setPdfOpen(true)}
+                >
+                  Show PDF
+                </button>
+              )}
+            </div>
+            <div className="flex-1">
+              <ChatInput documentId={document.documentId} onSendMessage={handleSendMessage} isLoading={isLoading} />
+            </div>
+          </div>
         </div>
       </div>
       <style jsx global>{`

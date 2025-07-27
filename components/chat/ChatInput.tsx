@@ -32,8 +32,8 @@ export default function ChatInput({ documentId, onSendMessage, isLoading }: Chat
   }, [message]);
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200">
-      <div className="flex items-end gap-2">
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="flex items-end gap-2 w-full">
         <textarea
           ref={textareaRef}
           value={message}
