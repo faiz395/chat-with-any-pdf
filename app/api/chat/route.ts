@@ -17,7 +17,7 @@ import serviceServer from "@/appwriteServer";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 console.log(genAI);
 const modelLLM = new ChatGoogleGenerativeAI({
-  model: "gemini-pro",
+  model: "gemini-2.0-flash",
   apiKey: process.env.GEMINI_API_KEY,
   // maxOutputTokens: 2048,
 });

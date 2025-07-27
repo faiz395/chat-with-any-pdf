@@ -10,19 +10,21 @@ import {
 } from '@clerk/nextjs'
 import {
   NavigationMenu,
-  // NavigationMenuContent,
-  // NavigationMenuIndicator,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  // NavigationMenuTrigger,
-  // NavigationMenuViewport,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu"
+
 
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import FooterSection from "@/components/FooterSection";
+import Navigation from "@/components/Navigation";
 
 
 // const geistSans = localFont({
@@ -49,8 +51,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-          <div className="flex items-center justify-between min-w-full p-3">
-            <NavigationMenu className="flex items-center justify-center">
+          <div className="flex items-center justify-between min-w-full p-3 ">
+            <div className="md-hidden" >
+              <Navigation />
+            </div>
+            <NavigationMenu className="flex items-center justify-center max-md:hidden">
               <NavigationMenuList>
                 <NavigationMenuItem>
                   <Link href="/" legacyBehavior passHref>
