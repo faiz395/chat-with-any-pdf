@@ -148,7 +148,7 @@ export default function ChatContainer({ document }: ChatContainerProps) {
         </div>
         {/* Chat Input (sticky on mobile/tablet) with Show PDF button on mobile */}
         <div className="sticky bottom-0 z-20 bg-white dark:bg-gray-900 border-t border-gray-200 p-2">
-          <div className="flex items-end gap-2 p-2 mx-2 md:p-0 ">
+          <div className="flex justify-center items-center gap-2 p-2 md:p-0">
             {/* Show PDF button only on mobile, right of input */}
             <div className="md:hidden flex-shrink-0">
               {!pdfOpen && (
