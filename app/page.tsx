@@ -8,12 +8,11 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 
 export default function Home() {
   return (
-    <>
-    <HeroSection/>
-    <FeaturesSection/>
-    <TestimonialsSection/>
-    <FAQSection/>
-    </>
-      
+    <main className="flex flex-col w-full min-h-screen bg-gradient-to-br from-indigo-100 via-white to-indigo-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <HeroSection />
+      <FeaturesSection />
+      <TestimonialsSection />
+      <FAQSection />
+    </main>
   );
 }
